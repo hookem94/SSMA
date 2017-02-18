@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
 """
+ORIGINATOR
 @author:       Lasha Khasaia
 @license:      GNU General Public License 3.0
 @contact:      @_qaz_qaz
+FORKED
+@author:       David Harper
 @Description:  SSMA - Simple Static Malware Analyzer
 """
 
