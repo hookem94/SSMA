@@ -29,14 +29,19 @@ print(colors.CYAN + """
 ╚══════╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝
 """ + colors.RESET)
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Simple Static Malware Analyzer")
     parser.add_argument("filename", help="/path/to/file")
     parser.add_argument("-k", "--api-key", help="Virustotal API key")
     parser.add_argument("-d", "--document", help="check document/MS Office file", action="store_true")
-
+    
     args = parser.parse_args()
     args.filename = os.path.realpath(args.filename)
+    vtchk = input('Do you want to check results against VirusTotal (Internet Connection & api key [--api-key] required) [y/n]: ').lower()
+    if vtchk == 'y':
+                yara_dl = input('Would you like to ReDownload Yara-Rules? [y/n] ').lower()
+    print()
     internet_connection = check_internet_connection()
     py_file_location = os.path.dirname(__file__)
     if py_file_location:
@@ -49,13 +54,13 @@ if __name__ == '__main__':
             print('\t', n)
         print()
         print("================================================================================")
-        if input("Continue? [Y/n] ") is 'n':
-            exit()
+        #if input("Continue? [Y/n] ") is 'n':
+            #exit()
         print()
         pe.sections_analysis()
         print("================================================================================")
-        if input("Continue? [Y/n] ") is 'n':
-            exit()
+        #if input("Continue? [Y/n] ") is 'n':
+            #exit()
         print()
         pe.check_file_header()
         check_date_result = pe.check_date()
@@ -63,8 +68,8 @@ if __name__ == '__main__':
             print(check_date_result)
             print()
             print("================================================================================")
-            if input("Continue? [Y/n] ") is 'n':
-                exit()
+            #if input("Continue? [Y/n] ") is 'n':
+                #exit()
             print()
         check_imports_result = pe.check_imports()
         if check_imports_result:
@@ -76,8 +81,8 @@ if __name__ == '__main__':
                 print('\t' + colors.LIGHT_RED + n[0] + colors.RESET + " - " + n[1])
             print()
             print("================================================================================")
-            if input("Continue? [Y/n] ") is 'n':
-                exit()
+            #if input("Continue? [Y/n] ") is 'n':
+                #exit()
             print()
     else:
         print(colors.BOLD + colors.YELLOW + "File Details: " + colors.RESET)
@@ -85,8 +90,8 @@ if __name__ == '__main__':
             print('\t', n)
         print()
         print("================================================================================")
-        if input("Continue? [Y/n] ") is 'n':
-            exit()
+        #if input("Continue? [Y/n] ") is 'n':
+            #exit()
         print()
     if args.api_key and internet_connection:
         virus_check = virustotal(args.filename, args.api_key)
@@ -97,8 +102,8 @@ if __name__ == '__main__':
                 print('\t' + colors.CYAN + n[0] + colors.RESET + "-" + colors.LIGHT_RED + n[1] + colors.RESET)
             print()
             print("================================================================================")
-            if input("Continue? [Y/n] ") is 'n':
-                exit()
+            #if input("Continue? [Y/n] ") is 'n':
+                #exit()
             print()
         elif virus_check[0] == "permalink":
             if virus_check[1]:
@@ -106,14 +111,14 @@ if __name__ == '__main__':
                 print(colors.BOLD + "VirusTotal link: " + colors.RESET, virus_check[1][0])
                 print()
                 print("================================================================================")
-                if input("Continue? [Y/n] ") is 'n':
-                    exit()
+                #if input("Continue? [Y/n] ") is 'n':
+                    #exit()
                 print()
         elif not internet_connection:
             print(colors.RED + "No internet connection" + colors.RESET)
             print("================================================================================")
-            if input("Continue? [Y/n] ") is 'n':
-                exit()
+            #if input("Continue? [Y/n] ") is 'n':
+                #exit()
             print()
         else:
             pass
@@ -138,8 +143,8 @@ if __name__ == '__main__':
             print()
         print()
         print("================================================================================")
-        if input("Continue? [Y/n] ") is 'n':
-            exit()
+        #if input("Continue? [Y/n] ") is 'n':
+            #exit()
         print()
     if strings[1]:
         print(colors.BOLD + colors.YELLOW + "Possible IP addresses in strings of the file: " + colors.RESET)
@@ -147,8 +152,8 @@ if __name__ == '__main__':
             print('\t', n)
         print()
         print("================================================================================")
-        if input("Continue? [Y/n] ") is 'n':
-            exit()
+        #if input("Continue? [Y/n] ") is 'n':
+            #exit()
         print()
     if strings[2]:
         print(colors.BOLD + colors.YELLOW + "Possible E-Mail addresses in strings of the file:" + colors.RESET)
@@ -156,8 +161,8 @@ if __name__ == '__main__':
             print('\t', n)
         print()
         print("================================================================================")
-        if input("Continue? [Y/n] ") is 'n':
-            exit()
+        #if input("Continue? [Y/n] ") is 'n':
+            #exit()
         print()
     if filetype == 'application/x-dosexec' or args.document:
         print(
@@ -171,8 +176,7 @@ if __name__ == '__main__':
             download_yara_rules_git()
             print()
         else:
-            if input(
-                                            colors.BOLD + colors.GREEN + "Would you like to ReDownload Yara-Rules? [y/N] " + colors.RESET) is 'y':
+            if yara_dl == 'y':
                 if os.path.exists("rules"):
                     shutil.rmtree("rules")
                 if os.path.exists("rules_compiled"):
@@ -192,8 +196,8 @@ if __name__ == '__main__':
                         print('\t', n)
                 print()
                 print("================================================================================")
-                if input("Continue? [Y/n] ") is 'n':
-                    exit()
+                #if input("Continue? [Y/n] ") is 'n':
+                    #exit()
                 print()
             packed = is_file_packed(filename=args.filename)
             if packed:
@@ -206,8 +210,8 @@ if __name__ == '__main__':
                         print('\t', n)
                 print()
                 print("================================================================================")
-                if input("Continue? [Y/n] ") is 'n':
-                    exit()
+                #if input("Continue? [Y/n] ") is 'n':
+                    #exit()
                 print()
             crypto = check_crypto(filename=args.filename)
             if crypto:
@@ -221,8 +225,8 @@ if __name__ == '__main__':
                         print('\t', n)
                 print()
                 print("================================================================================")
-                if input("Continue? [Y/n] ") is 'n':
-                    exit()
+                #if input("Continue? [Y/n] ") is 'n':
+                    #exit()
                 print()
             anti_vm = is_antidb_antivm(filename=args.filename)
             if anti_vm:
@@ -235,10 +239,9 @@ if __name__ == '__main__':
                         print('\t', n)
                 print()
                 print("================================================================================")
-                if input("Continue? [Y/n] ") is 'n':
-                    exit()
+                #if input("Continue? [Y/n] ") is 'n':
+                    #exit()
                 print()
-
         if args.document:
             document_result = is_malicious_document(filename=args.filename)
             print(
@@ -250,11 +253,11 @@ if __name__ == '__main__':
                     except:
                         print('\t', n)
                 print("================================================================================")
-                if input("Continue? [Y/n] ") is 'n':
-                    exit()
+                #if input("Continue? [Y/n] ") is 'n':
+                    #exit()
                 print()
             else:
                 print(colors.BOLD + "\tNothing found" + colors.RESET)
                 print("================================================================================")
-                exit()
+                #exit()
     print(colors.YELLOW + "Ups... " + colors.CYAN + "That's all :)" + colors.RESET + "\n")
